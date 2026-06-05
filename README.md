@@ -59,7 +59,7 @@ Auto-Visio-helper/
 将本仓库克隆或复制到 Codex 的 skills 目录中：
 
 ```powershell
-git clone <your-repo-url> $env:USERPROFILE\.codex\skills\auto-visio-helper
+git clone https://github.com/0Antique/Auto-Visio-Helper.git $env:USERPROFILE\.codex\skills\auto-visio-helper
 ```
 
 然后重启 Codex，或根据你的 Codex 环境重新加载 skills。
@@ -95,7 +95,7 @@ python -m pip install pywin32
 
 #### Auto-Visio-Helper最大池化示意图
 
-![img](file:///D:/C_Projects/VSCode_Proj/Auto-Visio-Helper/demo/max_pooling_demo.png)
+![img](demo/max_pooling_demo.png)
 
 ### 示例2 复现YOLO架构
 
