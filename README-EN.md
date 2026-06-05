@@ -1,57 +1,113 @@
 # Auto-Visio-Helper
 
-Auto-Visio-Helper is a Codex skill for planning, generating, reproducing, and refining editable Microsoft Visio scientific diagrams. It helps Codex convert natural-language research descriptions or reference images into a structured drawing spec, then render the confirmed spec into editable `.vsdx` files with optional preview exports.
+> Turn research-figure ideas, screenshots, and sketches into editable Microsoft Visio `.vsdx` diagrams.
 
-## Repository Description
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Codex Skill](https://img.shields.io/badge/Codex-Skill-blue)
+![Visio](https://img.shields.io/badge/Microsoft-Visio-3955A3)
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
+![GitHub Repo stars](https://img.shields.io/github/stars/0Antique/Auto-Visio-Helper?style=social)
 
-Codex skill for creating editable Microsoft Visio research diagrams from text descriptions or reference images, with JSON drawing specs, local Visio automation, and preview export support.
+![Auto-Visio-Helper poster](assets/auto-visio-helper-poster-image2.png)
 
-## What It Does
+**Auto-Visio-Helper** is a Codex skill for planning, generating, reproducing, and refining editable Microsoft Visio scientific diagrams. Instead of asking AI to draw shapes directly and unpredictably, it first converts your natural-language request, paper screenshot, PPT screenshot, or hand-drawn sketch into a reviewable JSON drawing spec, then renders the confirmed spec into an editable `.vsdx` file through local Microsoft Visio automation.
 
-- Turns vague research-figure requests into a reviewable JSON drawing spec.
-- Creates editable Visio diagrams instead of flattened pasted images.
-- Supports model architecture diagrams, method workflows, system architectures, experiment flows, concept figures, pseudo-code diagrams, sequence diagrams, and module interaction diagrams.
-- Supports image reproduction from paper screenshots, hand-drawn sketches, and PPT screenshots.
-- Encourages a confirm-before-render workflow: plan first, preview second, finalize `.vsdx` after review.
-- Provides a Python script for rendering JSON specs through local Microsoft Visio COM automation.
+中文文档见 [README.md](README.md).
+
+## Why This Exists
+
+- AI-generated diagrams often look good, but end up as flat images that cannot be edited.
+- Rebuilding paper figures in Visio by hand takes too much time.
+- Research diagrams usually need several revision rounds, so editable source files matter.
+- Codex performs better when diagram generation is split into a spec-first workflow.
+
+## Highlights
+
+- **Editable by default**: outputs Visio shapes, connectors, text boxes, layers, and named objects instead of flattened screenshots.
+- **Spec-first workflow**: creates a JSON drawing spec before rendering, so layout and structure can be reviewed.
+- **Research-friendly patterns**: supports model architectures, method workflows, system architectures, experiment flows, concept figures, sequence diagrams, and module interaction diagrams.
+- **Reference image reproduction**: redraws paper screenshots, PPT screenshots, and sketches as editable Visio diagrams.
+- **Local Visio automation**: uses `scripts/render_visio.py` to render JSON specs through Microsoft Visio COM automation.
+- **Preview and iteration**: supports dry-run validation and `.png` preview exports before final delivery.
+
+## Gallery
+
+### Max Pooling Diagram
+
+| User request / reference input | Auto-Visio-Helper output |
+| --- | --- |
+| ![max pooling prompt](assets/1780674451366.png) | ![max pooling demo](demo/max_pooling_demo.png) |
+
+### YOLO Architecture Reproduction
+
+| Reference | Editable Visio reproduction |
+| --- | --- |
+| ![YOLO reference](assets/1780678594787.png) | ![YOLO architecture](assets/yolo11_architecture.png) |
+
+### Technical Architecture Reproduction
+
+| Reference | Editable Visio reproduction |
+| --- | --- |
+| ![technical architecture reference](assets/1780678953352.png) | ![technical architecture](assets/tech_architecture.png) |
+
+## Good Fits
+
+- Research method diagrams, framework diagrams, and technical roadmaps.
+- YOLO, Transformer, CNN, encoder-decoder, detection head, and attention-module diagrams.
+- Data processing, training, inference, evaluation, and deployment workflows.
+- Software system architectures and module interaction diagrams.
+- Experiment design, ablation studies, and benchmark comparison flows.
+- Redrawing existing images into editable Visio diagrams for papers, theses, and presentations.
 
 ## Workflow
 
-1. Understand the user request or uploaded reference image.
-2. Classify the task as description-to-diagram, image reproduction, paper redraw, or Visio refinement.
-3. Generate a concise design brief and structured drawing spec.
-4. Ask the user to confirm the spec or requested preview export formats.
-5. Render the confirmed spec with local Visio.
-6. Export previews such as `.png`, `.pdf`, or `.svg`.
-7. Inspect and iterate until the diagram is publication-ready.
-
-## Directory Structure
-
-```text
-Auto-Visio-helper/
-├── SKILL.md
-├── agents/
-│   └── openai.yaml
-├── references/
-│   ├── diagram_types.md
-│   ├── drawing_spec.md
-│   ├── style_guide.md
-│   ├── visio_automation.md
-│   └── 绘图模版.vsdx
-├── scripts/
-│   └── render_visio.py
-└── 需求.md
+```mermaid
+flowchart LR
+    A["Text request / reference image"] --> B["Codex analyzes diagram type and layout"]
+    B --> C["Generate JSON drawing spec"]
+    C --> D["User reviews structure, style, and exports"]
+    D --> E["Render editable .vsdx with local Visio"]
+    E --> F["Export PNG preview"]
+    F --> G["Inspect and iterate until publication-ready"]
 ```
 
 ## Installation
 
-Copy or clone this folder into your Codex skills directory:
+Clone this repository into your Codex skills directory:
 
 ```powershell
-git clone <your-repo-url> $env:USERPROFILE\.codex\skills\auto-visio-helper
+git clone https://github.com/0Antique/Auto-Visio-Helper.git $env:USERPROFILE\.codex\skills\auto-visio-helper
 ```
 
 Then restart Codex or reload skills if your environment requires it.
+
+## Skill Invocation Example
+
+```text
+Use $auto-visio-helper to create an editable Visio diagram for my YOLO11 pest detection method.
+Include dataset preprocessing, backbone, feature fusion, detection head, loss, and output prediction.
+Use a clean paper-style layout and export a PNG preview.
+```
+
+## Script Usage
+
+Validate a drawing spec without opening Visio:
+
+```powershell
+python scripts\render_visio.py spec.json --dry-run
+```
+
+Render an editable Visio file and export a preview:
+
+```powershell
+python scripts\render_visio.py spec.json --output output\diagram.vsdx --export-png output\diagram.png
+```
+
+Render with the included Visio template:
+
+```powershell
+python scripts\render_visio.py spec.json --template references\绘图模版.vsdx --output output\diagram.vsdx --export-png output\diagram.png
+```
 
 ## Requirements
 
@@ -71,27 +127,9 @@ Install `pywin32`:
 python -m pip install pywin32
 ```
 
-## Script Usage
-
-Validate a drawing spec without opening Visio:
-
-```powershell
-python scripts\render_visio.py spec.json --dry-run
-```
-
-Render an editable Visio file:
-
-```powershell
-python scripts\render_visio.py spec.json --output output\diagram.vsdx --export-png output\diagram.png
-```
-
-Render with the included Visio template:
-
-```powershell
-python scripts\render_visio.py spec.json --template references\绘图模版.vsdx --output output\diagram.vsdx --export-png output\diagram.png
-```
-
 ## Drawing Spec Example
+
+Auto-Visio-Helper uses JSON as the contract between Codex reasoning and Visio automation:
 
 ```json
 {
@@ -112,15 +150,54 @@ python scripts\render_visio.py spec.json --template references\绘图模版.vsdx
 }
 ```
 
-## Skill Invocation Example
+See [references/drawing_spec.md](references/drawing_spec.md) for the full spec notes.
+
+## Directory Structure
 
 ```text
-Use $auto-visio-helper to create an editable Visio diagram for my YOLO11 pest detection method. Include dataset preprocessing, backbone, feature fusion, detection head, loss, and output prediction.
+Auto-Visio-Helper/
+├── SKILL.md
+├── README.md
+├── README-EN.md
+├── agents/
+│   └── openai.yaml
+├── assets/
+│   ├── auto-visio-helper-poster-image2.png
+│   └── ...
+├── demo/
+│   ├── max_pooling_demo.vsdx
+│   ├── yolo11_architecture.vsdx
+│   └── tech_architecture.vsdx
+├── references/
+│   ├── diagram_types.md
+│   ├── drawing_spec.md
+│   ├── style_guide.md
+│   ├── visio_automation.md
+│   └── 绘图模版.vsdx
+└── scripts/
+    └── render_visio.py
 ```
 
-## Notes
+## Design Principles
 
-- The final diagram should use editable Visio shapes, connectors, text boxes, layers, and names.
-- Do not use a pasted bitmap as the final result for image reproduction tasks.
-- Use `references/drawing_spec.md` as the contract between diagram reasoning and Visio automation.
-- Use `references/style_guide.md` to keep paper figures readable and consistent.
+- The final diagram must stay editable; do not paste a bitmap as the final output.
+- Complex diagrams should be planned as specs before rendering.
+- Publication diagrams should prioritize readability, alignment, spacing, font size, and black-white print clarity.
+- Reference reproduction should preserve meaning and structure while allowing publication-friendly cleanup.
+
+## Roadmap
+
+- More Visio shape master mappings.
+- More complete `.pdf` and `.svg` export support.
+- Spec templates for common model architectures.
+- Stronger reference-image parsing and layout correction.
+
+## Star History
+
+If this project helps you turn research diagrams from pasted screenshots into editable, reusable, publication-ready Visio files, a Star would help others discover it.
+
+[![Star History Chart](https://api.star-history.com/svg?repos=0Antique/Auto-Visio-Helper&type=Date)](https://star-history.com/#0Antique/Auto-Visio-Helper&Date)
+
+## License
+
+MIT License
