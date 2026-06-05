@@ -1,0 +1,7 @@
+interface:
+  display_name: "Auto Visio Helper"
+  short_description: "Create editable research diagrams in local Visio"
+  default_prompt: "Use $auto-visio-helper to turn my research method description into an editable Visio diagram with a preview export."
+
+policy:
+  allow_implicit_invocation: true
